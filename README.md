@@ -1,9 +1,11 @@
 # tegra-demo-distro
 
+**THIS IS A WORK-IN-PROGRESS BRANCH FOR L4T R32.7.1 UPDATE. DO NOT USE.**
+
 Reference/demo distribution for NVIDIA Jetson platforms
 using Yocto Project tools and the meta-tegra BSP layer.
 
-![Build status](https://builder.madison.systems/badges/tegrademo-master.svg)
+![Build status](https://builder.madison.systems/badges/tegrademo-wip-32-7-1.svg)
 
 Metadata layers are brought in as git submodules:
 
