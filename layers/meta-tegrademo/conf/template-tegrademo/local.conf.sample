@@ -298,8 +298,14 @@ CONF_VERSION = "1"
 #
 # FIXME: tegra-crypt-init platform-preboot-cboot.sh and tegra194/platform-preboot.sh
 #        are currently hard coded to --unique-pass
-# TEGRA_DISK_ENCRYPTION_ARGS = "--no-flash --encrypted --unique-pass"
+# For a device with unflashed fuses (especially KEK2 must still be zeroes), you
+# use a null user_keyfile
+# echo "0x00000000 0x00000000 0x00000000 0x00000000" > null_user_key_file.txt
+# TEGRA_DISK_ENCRYPTION_ARGS = "--no-flash --encrypted --unique-pass --user_key null_user_key_file.txt"
 #
+# If you have flashed KEK2, you will need to create an eks.img even if you choose
+# to continue using a null user_keyfile
+
 # [WIP] Passing the following as variables in doflash.sh avoids the need to query
 # the device for ecid (derived from BR_CID). After the encryption is performed,
 # the flashing will happen automatically which does require the device to be
