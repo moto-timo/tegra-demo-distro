@@ -259,3 +259,72 @@ PACKAGECONFIG_append_pn-qemu-system-native = " sdl"
 # track the version of this file when it was generated. This can safely be ignored if
 # this doesn't mean anything to you.
 CONF_VERSION = "1"
+
+# LUKS Disk Encryption
+#
+# Add in local.conf, distro.conf or <machine>.conf
+# MACINEOVERRIDES =. "crypparts:"
+
+# Override the default "ext4" as it is much more efficient to populate the
+# encrypted rootfs from a tarball. Avoids needing a second loop dev just for
+# the source ext4.
+# IMAGE_TEGRAFLASH_FS_TYPE = "tar.gz"
+
+# Enable unique_guid for encrypted partitions
+# CRYPTSETUP_DISKUUID ?= "1"
+
+# The unique_guid is a _disk_ uuid (UUID) no a partition uuid (PARTUUID)
+# e.g. /dev/disk/by-uuid/<unique_guid>. We need these values in many locations
+# e.g. kernel command line, /etc/crypttab so set them globally.
+# CRYPTSETUP_DISKUUID[partition.name] := "$(uuidgen)"
+# 
+# CRYPTSETUP_DISKUUID[APP_ENC] = "<uuid>"
+# CRYPTSETUP_DISKUUID[UDA] = "<uuid>"
+#
+# [WIP] Need to pass root=UUID=<uuid> to kernel command line
+# KERNEL_ROOTSPEC = "root=UUID=${@d.getVarFlag('CRYPTSETUP_DISKUUID', 'APP_ENC')} rw rootwait"
+# Appends "bootargs" in "chosen" node of dtb
+# KERNEL_ARGS:append:cryptparts = " ${KERNEL_ROOTSPEC}"
+#
+# For jetson-agx-xavier, only cboot is used with bundled initramfs, so
+# /boot is empty and it makes no sense to generate an unencrypted APP
+# boot (only) partition
+# CRYPTSETUP_ENCRYPTED_BOOTPART ?= "0"
+#
+# For the case where we have an unencrypted boot partion (APP)
+# CRYPTSETUP_ENCRYPTED_BOOTPART ?= "1"
+# let bpsize=(150 * 1024 * 1024) e.g. 150 MiB
+# ROOTFS_BOOTPART_SIZE ?= "157286400"
+#
+# FIXME: tegra-crypt-init platform-preboot-cboot.sh and tegra194/platform-preboot.sh
+#        are currently hard coded to --unique-pass
+# TEGRA_DISK_ENCRYPTION_ARGS = "--no-flash --encrypted --unique-pass"
+#
+# [WIP] Passing the following as variables in doflash.sh avoids the need to query
+# the device for ecid (derived from BR_CID). After the encryption is performed,
+# the flashing will happen automatically which does require the device to be
+# connected in recovery mode.
+# TEGRA_DISK_ENCRYPTION_VARS = "FAB=${FAB} BOARDID=${BOARDID} BOARDSKU=${BOARDSKU} BOARDREV=${BOARDREV} CHIPREV=${CHIPREV} BR_CID=${BR_CID}"
+# 
+# crypt overhead can cause the final tegraflash to be too large to fit on the
+# emmc, so you may need to set smaller ROOTFSPART_SIZE than the default.
+# let rfspsize=(8 * 1024 * 1024 * 1024) i.e. 8 GiB
+# ROOTFSPART_SIZE ?= "8589934592"
+
+# Planned variables for A/B rootfs implementation
+#
+# Enabled encrypted A/B rootfs
+# CRYPTSETUP_ROOTFS_AB ?= "1"
+
+# Set the partition.name(s) for the A/B rootfs partitions in flash.xml.in
+# These might be different if you are using e.g. RAUC or Mender
+# CRYPTSETUP_ROOTFS_AB[A] = "APP_ENC"
+# CRYPTSETUP_ROOTFS_AB[B] = "APP_ENC_b"
+
+# Enable unencrypted A/B boot partition
+# CRYPTSETUP_BOOTPART_AB ?= "1"
+
+# Set the partition.name(s) for the A/B unencrypted boot partitions in 
+# flash.xml.in. These might be different if you are using e.g. RAUC or Mender
+# CRYPTSETUP_BOOTPART_AB[A] = "APP"
+# CRYPTSETUP_BOOTPART_AB[B] = "APP_b"
