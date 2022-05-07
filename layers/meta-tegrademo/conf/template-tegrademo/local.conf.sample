@@ -289,10 +289,10 @@ CONF_VERSION = "1"
 # For jetson-agx-xavier, only cboot is used with bundled initramfs, so
 # /boot is empty and it makes no sense to generate an unencrypted APP
 # boot (only) partition
-# CRYPTSETUP_ENCRYPTED_BOOTPART ?= "0"
+# CRYPTSETUP_UNENCRYPTED_BOOTPART ?= "0"
 #
 # For the case where we have an unencrypted boot partion (APP)
-# CRYPTSETUP_ENCRYPTED_BOOTPART ?= "1"
+# CRYPTSETUP_UNENCRYPTED_BOOTPART ?= "1"
 # let bpsize=(150 * 1024 * 1024) e.g. 150 MiB
 # ROOTFS_BOOTPART_SIZE ?= "157286400"
 #
