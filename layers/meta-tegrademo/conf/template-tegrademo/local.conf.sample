@@ -263,7 +263,7 @@ CONF_VERSION = "1"
 # LUKS Disk Encryption
 #
 # Add in local.conf, distro.conf or <machine>.conf
-# MACINEOVERRIDES =. "crypparts:"
+# MACHINEOVERRIDES =. "cryptparts:"
 
 # Override the default "ext4" as it is much more efficient to populate the
 # encrypted rootfs from a tarball. Avoids needing a second loop dev just for
